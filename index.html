@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Title</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200;500&display=swap');
+
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body{
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 200;
+            color: var(--tg-theme-text-color);
+            background: var(--tg-theme-bg-color);
+        }
+        #main{
+            width: 100%;
+            padding: 20px;
+            text-align: center;
+        }
+        #form {
+            display: none; /* Ensuring the form is hidden initially */
+            width: 100%;
+            max-width: 400px; /* Limit maximum width */
+            margin: 20px auto; /* Center the form */
+            padding: 20px;
+            background-color: var(--tg-theme-bg-color);
+            border-radius: 10px; /* Rounded corners */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        }
+
+        #form input {
+            width: 100%; /* Full width inputs */
+            padding: 10px; /* Spacing inside the input */
+            margin-bottom: 15px; /* Space between inputs */
+            border: 1px solid var(--tg-theme-border-color);
+            border-radius: 5px; /* Rounded corners for inputs */
+            font-size: 16px; /* Larger font size */
+        }
+
+        #form input:focus {
+            outline: none; /* Remove default outline */
+            border-color: var(--tg-theme-button-color); /* Change border color on focus */
+        }
+
+        #form #error {
+            color: red; /* Error message color */
+            margin-bottom: 10px; /* Space below the error message */
+        }
+
+        #order {
+            background-color: var(--tg-theme-button-color); /* Button background */
+            color: white; /* Button text color */
+        }
+
+        #order:hover {
+            background-color: var(--tg-theme-secondary-bg-color); /* Darken on hover */
+        }
+
+        h1{
+            margin-top: 50px;
+            margin-bottom: 10px;
+        }
+        img{
+            width: 70px;
+            margin: 30px auto;
+        }
+        p{
+            width: 350px;
+            margin: 0 auto;
+        }
+        button{
+            border: 0;
+            border-radius: 5px;
+            margin-top: 50px;
+            height: 60px;
+            width: 200px;
+            font-size: 20px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 500ms ease;
+            color: var(--tg-theme-button-color);
+            background: var(--tg-theme-button-text-color);
+        }
+
+        button:hover{
+            background: var(--tg-theme-secondary-bg-color)
+        }
+
+    </style>
+</head>
+<body>
+<div id="main">
+    <h1>Online shop</h1>
+    <img src="https://cdn-icons-png.flaticon.com/512/3595/3595455.png">
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusatium ipsum magni, molestias</p>
+    <button id="buy">Buy</button>
+</div>
+<form id="form">
+    <input type="text" placeholder="Name" id="user_name">
+    <input type="email" placeholder="Email" id="user_email"> <!-- Changed input type -->
+    <input type="tel" placeholder="Phone" id="user_phone"> <!-- Changed input type -->
+    <div id="error"></div>
+    <button id="order">Order</button>
+</form>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script>
+    let tg = window.Telegram.WebApp;
+    let buy = document.getElementById("buy");
+    let order = document.getElementById("order");
+    tg.expand()
+
+    buy.addEventListener("click", () => { // Fixed event listener
+        document.getElementById("main").style.display = "none";
+        document.getElementById("form").style.display = "block";
+        document.getElementById("user_name").value = tg.initDataUnsafe.user.first_name + " " + tg.initDataUnsafe.user.last_name;
+    });
+
+    order.addEventListener("click", (event) => {
+        event.preventDefault();
+        document.getElementById("error").innerText = '';
+        let name = document.getElementById("user_name").value;
+        let email = document.getElementById("user_email").value;
+        let phone = document.getElementById("user_phone").value;
+        if(name.length < 5) {
+            document.getElementById("error").innerText = 'Error in name';
+            return
+        }
+        if(email.length < 5) {
+            document.getElementById("error").innerText = 'Error in email';
+            return
+        }
+        if(phone.length < 5) {
+            document.getElementById("error").innerText = 'Error in phone number';
+            return
+        }
+
+        let data = {
+            name: name,
+            email: email,
+            phone: phone
+        }
+        tg.sendData(JSON.stringify(data))
+
+        tg.close();
+    })
+</script>
+</body>
+</html>
