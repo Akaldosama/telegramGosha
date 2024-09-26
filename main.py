@@ -12,7 +12,7 @@ dp = Dispatcher(bot)
 @dp.message_handler(commands=['start'])
 async def start(message: types.Message):
     markup = types.InlineKeyboardMarkup()
-    markup.add(types.InlineKeyboardButton('Open web page', web_app=WebAppInfo(url='https://66f57f7320784b291e49fafa--boisterous-sunshine-1fd28c.netlify.app')))
+    markup.add(types.InlineKeyboardButton('Open web page', web_app=WebAppInfo(url='https://66f5816bae70e72ab8b7856e--radiant-sorbet-97b525.netlify.app/')))
     await message.answer('Hello my Friend', reply_markup=markup)
 
 
